@@ -27,6 +27,6 @@ public class PinoColorido extends Pino{
     public void acaoDoBotao(ActionEvent e) {
         Cor novaCor = Cores.getInstance().proximaCor(getCor().getNomeCor());
         setCor(novaCor);
-        SomUtils.tocarSom("C:\\Users\\João Victor\\Downloads\\CodigoInicialMiniSenha\\CodigoInicialMiniSenha\\Som\\boop.wav");
+        SomUtils.tocarSom("Som/boop.wav");
     }
 }
