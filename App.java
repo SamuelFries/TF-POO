@@ -1,26 +1,20 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.FlowLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class App {
-    private int nroTentativa;
     private JFrame frame;
     private Tentativas tentativas;
     private List<Cor> combinacaoSecreta;
+    private int nroTentativa;
+    private boolean modoTeste;
 
-    public App(){
+    public App() {
+        modoTeste = false;
         nroTentativa = 0;
         combinacaoSecreta = gerarCombinacaoSecreta();
     }
@@ -89,8 +83,8 @@ public class App {
         return feedback;
     }
 
-    public void verifica(){
-        if (nroTentativa >= Tentativas.NROTEN-1){
+    public void verifica() {
+        if (nroTentativa >= Tentativas.NROTEN - 1) {
             JOptionPane.showMessageDialog(frame, "Você perdeu", "Fim de jogo", JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         }
@@ -102,20 +96,55 @@ public class App {
         tentativas.getTentativaComDica(nroTentativa).getTentativa().habilita();
     }
 
-    public void criaJanelaPrincipal() {
+    public void criarETelaInicial() {
+        JFrame telaInicial = new JFrame("Tela Inicial");
+        telaInicial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        telaInicial.setSize(300, 200);
+
+        JPanel painelInicial = new JPanel(new GridLayout(2, 1));
+
+        JButton btnTeste = new JButton("Teste");
+        btnTeste.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                telaInicial.dispose(); // Fecha a tela inicial
+                modoTeste = true;
+                criarJanelaPrincipal(); // Inicia a janela principal no modo teste
+            }
+        });
+
+        JButton btnJogar = new JButton("Jogar");
+        btnJogar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                telaInicial.dispose(); // Fecha a tela inicial
+                modoTeste = false;
+                criarJanelaPrincipal(); // Inicia a janela principal no modo normal
+            }
+        });
+
+        painelInicial.add(btnTeste);
+        painelInicial.add(btnJogar);
+
+        telaInicial.add(painelInicial);
+        telaInicial.setLocationRelativeTo(null); // Centraliza a tela inicial
+        telaInicial.setVisible(true);
+    }
+
+    public void criarJanelaPrincipal() {
         frame = new JFrame("Mini Senha");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JLabel lbConfig = new JLabel("Controles");
         JButton btVerificar = new JButton("Verificar");
         btVerificar.addActionListener(e -> verifica());
-        JButton btSair = new JButton("Sair");
-        btSair.addActionListener(e -> System.exit(0));
+        JButton btVoltar = new JButton("Voltar");
+        btVoltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose(); // Fecha a janela principal
+                criarETelaInicial(); // Volta para a tela inicial
+            }
+        });
         JPanel pnCtrl = new JPanel();
-        pnCtrl.setLayout(new BoxLayout(pnCtrl, BoxLayout.PAGE_AXIS));
-        pnCtrl.add(lbConfig);
-        pnCtrl.add(btVerificar);
-        pnCtrl.add(btSair);
+        pnCtrl.setLayout(new BorderLayout());
 
         tentativas = new Tentativas();
 
@@ -125,6 +154,23 @@ public class App {
         contentPane.add(pnCtrl, BorderLayout.WEST);
         contentPane.add(tentativas.getPainel(), BorderLayout.CENTER);
 
+        if (modoTeste) {
+            contentPane.add(criarPainelCombinacaoSecreta(), BorderLayout.NORTH);
+        }
+
+        // Adiciona o botão Voltar no canto superior esquerdo
+        pnCtrl.add(btVoltar, BorderLayout.NORTH);
+
+        // Cria um painel para o botão Verificar
+        JPanel painelVerificar = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        painelVerificar.add(btVerificar, gbc);
+
+        // Adiciona o painel do botão Verificar abaixo de tudo
+        contentPane.add(painelVerificar, BorderLayout.SOUTH);
+
         // Libera a primeira linha de tentativa
         tentativas.getTentativaComDica(nroTentativa).getTentativa().habilita();
 
@@ -133,11 +179,26 @@ public class App {
         frame.setVisible(true);
     }
 
+    private JPanel criarPainelCombinacaoSecreta() {
+        JPanel painelCombinacaoSecreta = new JPanel();
+        painelCombinacaoSecreta.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        for (Cor cor : combinacaoSecreta) {
+            JLabel labelCor = new JLabel();
+            labelCor.setOpaque(true);
+            labelCor.setBackground(cor.getCor());
+            labelCor.setPreferredSize(new Dimension(50, 50));
+            painelCombinacaoSecreta.add(labelCor);
+        }
+
+        return painelCombinacaoSecreta;
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 App app = new App();
-                app.criaJanelaPrincipal();
+                app.criarETelaInicial(); // Inicia pela tela inicial
             }
         });
     }

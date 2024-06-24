@@ -2,7 +2,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public class Tentativas {
-    public static final int NROTEN = 5;
+    public static final int NROTEN = 10;
     private TentativaComDica[] tentativas;
     public JPanel painel;
 

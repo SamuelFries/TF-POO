@@ -7,7 +7,7 @@ public abstract class Pino extends JButton {
     private Cor cor;
 
     protected Pino(Cor cor){
-        super("O");
+        super("         ");
         this.setCor(cor);
         this.addActionListener(e->acaoDoBotao(e));
     }

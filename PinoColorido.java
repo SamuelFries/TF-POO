@@ -1,16 +1,16 @@
-import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 
-public class PinoColorido extends Pino{
+public class PinoColorido extends Pino {
 
     protected PinoColorido(Cor cor) {
         super(cor);
     }
 
-    public static PinoColorido criaPinoColorido(String nomeCor){
+    public static PinoColorido criaPinoColorido(String nomeCor) {
         Cor cor = Cores.getInstance().getCor(nomeCor);
-        if (cor == null){
-            throw new IllegalArgumentException("Cor invalida: "+nomeCor);
+        if (cor == null) {
+            throw new IllegalArgumentException("Cor invalida: " + nomeCor);
         }
         return new PinoColorido(cor);
     }
@@ -19,5 +19,7 @@ public class PinoColorido extends Pino{
     public void acaoDoBotao(ActionEvent e) {
         Cor novaCor = Cores.getInstance().proximaCor(getCor().getNomeCor());
         setCor(novaCor);
+        Som.tocarSom(); // Chama o método tocarSom() para tocar o som definido na classe Som
     }
 }
+    

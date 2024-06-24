@@ -21,9 +21,9 @@ public class Cores {
         cores.put("YELLOW", new Cor("YELLOW", Color.YELLOW));
         cores.put("BLUE", new Cor("BLUE", Color.BLUE));
         cores.put("MAGENTA", new Cor("MAGENTA", Color.MAGENTA));
-        cores.put("ORANGE", new Cor("ORANGE", Color.ORANGE));
+        cores.put("CYAN", new Cor("CYAN", Color.CYAN));
         cores.put("GRAY", new Cor("GRAY", Color.GRAY));
-        cores.put("PINK", new Cor("PINK", Color.PINK));
+      
     }
 
     public Cor getCor(String key){
