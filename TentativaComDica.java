@@ -1,6 +1,4 @@
 import java.awt.FlowLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public class TentativaComDica {

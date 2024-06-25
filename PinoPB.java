@@ -35,6 +35,6 @@ public class PinoPB extends Pino {
 
     @Override
     public void acaoDoBotao(ActionEvent e) {
-        // Em princípio os pinos de pista não têm ação sobre o jogo quando acionados
+        
     }
 }
